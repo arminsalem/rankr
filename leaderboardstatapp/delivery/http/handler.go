@@ -46,6 +46,7 @@ type PublicLeaderboardRowResponse struct {
 
 type GetPublicLeaderboardResponse struct {
 	ProjectID string                         `json:"project_id"`
+	Total     uint64                         `json:"total"`
 	Rows      []PublicLeaderboardRowResponse `json:"rows"`
 }
 
@@ -100,6 +101,7 @@ func (h Handler) GetPublicLeaderboard(c echo.Context) error {
 
 	response := GetPublicLeaderboardResponse{
 		ProjectID: projectID,
+		Total:     result.Total,
 		Rows:      rows,
 	}
 

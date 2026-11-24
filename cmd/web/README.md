@@ -65,13 +65,28 @@ RANKR_FEATURE_WEB_ENABLED=on RANKR_FEATURE_WEB_LEADERBOARD=on \
 The refresh button updates the leaderboard using htmx.
 htmx 2.0.11 is loaded from jsDelivr with an integrity check.
 
+## Project page
+
+For local testing, add `/v1/projects/public/:id` to the project service's
+`http_server.public_paths` and start project and leaderboardstat. With a
+public GitHub repository linked to a project, start the web service:
+
+```bash
+RANKR_FEATURE_WEB_ENABLED=on RANKR_FEATURE_WEB_PROJECT=on go run ./cmd/web serve
+```
+
+Open `http://localhost:8085/projects/<project-uuid>` using the Rankr project ID.
+The page shows the repository owner, provider, project status, daily
+contributor count, and top 10 daily scores. Configure the project service
+URL and timeout under `project_api`. The page is off by default.
+
 ## Configuration
 
 The default file is deploy/web/development/config.yml.
 Set CONFIG_PATH to use another YAML file.
 
 The [shared flag registry](../../docs/flags.md) reads web flags from `features:`.
-Both flags default to `off`. Set both to `on` to start the server and expose
+Web flags default to `off`. Set these to `on` to start the server and expose
 the leaderboard:
 
 ```yaml

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>لیدربورد پروژه {{.ProjectID}} | Rankr</title>
-    {{if not .Preview}}
+    <title>{{if .Project}}{{.Project.Name}}{{else}}لیدربورد پروژه {{.ProjectID}}{{end}} | Rankr</title>
+    {{if not (or .Preview .Project)}}
     <meta
       name="htmx-config"
       content='{
@@ -144,10 +144,27 @@
         <a href="/preview?state=error">حالت خطا</a>
       </nav>
       {{end}}
+      {{if .Project}}
+      <h1><bdi>{{.Project.Name}}</bdi></h1>
+      <dl>
+        <dt>مالک مخزن</dt>
+        <dd><bdi>{{.Project.Owner}}</bdi></dd>
+        <dt>سرویس میزبانی</dt>
+        <dd><bdi>{{.Project.Provider}}</bdi></dd>
+        <dt>وضعیت پروژه</dt>
+        <dd><bdi>{{.Project.Status}}</bdi></dd>
+        {{if .Total}}
+        <dt>تعداد مشارکت‌کنندگان در لیدربورد روزانه</dt>
+        <dd>{{.Total}}</dd>
+        {{end}}
+      </dl>
+      <h2>لیدربورد روزانه</h2>
+      {{else}}
       <h1>لیدربورد عمومی</h1>
+      {{end}}
       <p>شناسهٔ مخزن: {{.ProjectID}}</p>
 
-      {{if not .Preview}}
+      {{if not (or .Preview .Project)}}
       <form
         class="refresh-form"
         method="get"

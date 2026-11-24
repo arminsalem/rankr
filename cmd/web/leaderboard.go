@@ -7,6 +7,7 @@ import (
 	"io"
 
 	"github.com/gocasters/rankr/adapter/leaderboardstat"
+	"github.com/gocasters/rankr/adapter/project"
 )
 
 //go:embed templates/leaderboard.html
@@ -17,6 +18,8 @@ type leaderboardView struct {
 	Rows      []leaderboardstat.PublicLeaderboardRow
 	Error     bool
 	Preview   bool
+	Project   *project.PublicProject
+	Total     *uint64
 }
 
 func renderLeaderboard(w io.Writer, view leaderboardView) error {

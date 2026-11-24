@@ -13,6 +13,7 @@ import (
 
 type PublicLeaderboard struct {
 	ProjectID string                 `json:"project_id"`
+	Total     *uint64                `json:"total"`
 	Rows      []PublicLeaderboardRow `json:"rows"`
 }
 

@@ -16,6 +16,10 @@ type Config struct {
 		BaseURL string        `koanf:"base_url"`
 		Timeout time.Duration `koanf:"timeout"`
 	} `koanf:"leaderboard_api"`
+	ProjectAPI struct {
+		BaseURL string        `koanf:"base_url"`
+		Timeout time.Duration `koanf:"timeout"`
+	} `koanf:"project_api"`
 }
 
 func loadConfig(configPath string) (Config, error) {

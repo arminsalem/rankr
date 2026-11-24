@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/gocasters/rankr/adapter/leaderboardstat"
+	"github.com/gocasters/rankr/adapter/project"
 	"github.com/gocasters/rankr/pkg/featureflag"
 	"github.com/gocasters/rankr/pkg/path"
 	"github.com/spf13/cobra"
@@ -67,6 +68,15 @@ func newRootCommand() *cobra.Command {
 				return nil
 			}
 			leaderboardEnabled := flags.Enabled("web_leaderboard")
+			projectEnabled := flags.Enabled("web_project")
+			var projectClient *project.HTTPClient
+			if projectEnabled {
+				projectClient, err = project.NewHTTPClient(cfg.ProjectAPI.BaseURL, cfg.ProjectAPI.Timeout)
+				if err != nil {
+					return fmt.Errorf("web: create project client: %w", err)
+				}
+				cfg.HTTPServer.PublicPaths = append(cfg.HTTPServer.PublicPaths, projectPagePath)
+			}
 
 			if *preview {
 				cfg.HTTPServer.PublicPaths = append(
@@ -75,7 +85,7 @@ func newRootCommand() *cobra.Command {
 			}
 
 			var client *leaderboardstat.HTTPClient
-			if leaderboardEnabled {
+			if leaderboardEnabled || projectEnabled {
 				client, err = leaderboardstat.NewHTTPClient(
 					cfg.LeaderboardAPI.BaseURL,
 					cfg.LeaderboardAPI.Timeout,
@@ -84,6 +94,8 @@ func newRootCommand() *cobra.Command {
 					return fmt.Errorf("web: create leaderboard client: %w", err)
 				}
 
+			}
+			if leaderboardEnabled {
 				cfg.HTTPServer.PublicPaths = append(
 					cfg.HTTPServer.PublicPaths, "/leaderboard",
 				)
@@ -98,6 +110,9 @@ func newRootCommand() *cobra.Command {
 			registerLeaderboard(
 				server.GetRouter(), client, leaderboardEnabled,
 			)
+			if projectEnabled {
+				registerProjectPage(server.GetRouter(), projectClient, client)
+			}
 
 			return serve(cmd.Context(), server)
 		},

@@ -6,9 +6,11 @@ import (
 	"testing"
 
 	"github.com/gocasters/rankr/adapter/leaderboardstat"
+	"github.com/gocasters/rankr/adapter/project"
 )
 
 func TestRenderLeaderboard(t *testing.T) {
+	total := uint64(21)
 	tests := []struct {
 		name string
 		view leaderboardView
@@ -28,6 +30,19 @@ func TestRenderLeaderboard(t *testing.T) {
 				"<td>1</td>",
 				"<td>101</td>",
 				"<td>12</td>",
+			},
+		},
+		{
+			name: "project",
+			view: leaderboardView{
+				ProjectID: "5001",
+				Project:   &project.PublicProject{Name: "rankr", Owner: "gocasters", Provider: "GITHUB", Status: "ACTIVE"},
+				Total:     &total,
+				Rows:      []leaderboardstat.PublicLeaderboardRow{{Rank: 1, UserID: 101, Score: 12}},
+			},
+			want: []string{
+				`lang="fa" dir="rtl"`, "<bdi>rankr</bdi>", "<bdi>gocasters</bdi>",
+				"<bdi>GITHUB</bdi>", "<bdi>ACTIVE</bdi>", "<dd>21</dd>", "<td>101</td>",
 			},
 		},
 		{

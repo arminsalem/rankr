@@ -51,6 +51,7 @@ func (s Server) RegisterRoutes() {
 	projectGroup.GET("", s.Handler.listProjects)
 
 	projectGroup.POST("", s.Handler.createProject)
+	projectGroup.GET("/public/:id", s.Handler.getPublicProject)
 
 	projectGroup.GET("/:id", s.Handler.GetProjectById)
 
