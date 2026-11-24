@@ -81,6 +81,11 @@ is the issue that flips it and then deletes it.
 | Name | Owner | Week | Status | Removal issue |
 |---|---|---|---|---|
 | `scoring_v1` | TBD | TBD | off | #240 |
+| `web_enabled` | arminsalem | TBD | off | TBD |
+| `web_leaderboard` | arminsalem | TBD | off | TBD |
 
 `scoring_v1` gates scoring rules v1 (`docs/scoring-rules-v1.md`), implemented
 behind the flag by #233.
+
+`web_enabled` starts the `cmd/web` HTTP server and `web_leaderboard` exposes
+`/leaderboard` when the server is on. Both flags were introduced for #218.

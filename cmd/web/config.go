@@ -10,6 +10,7 @@ import (
 
 type Config struct {
 	HTTPServer httpserver.Config `koanf:"http_server"`
+	Features   map[string]string `koanf:"features"`
 
 	LeaderboardAPI struct {
 		BaseURL string        `koanf:"base_url"`

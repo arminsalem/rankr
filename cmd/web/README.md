@@ -5,14 +5,13 @@ configuration loading, and graceful shutdown.
 
 An opt-in leaderboard preview renders sample, empty, and error states.
 An opt-in leaderboard page fetches data from the leaderboardstat HTTP API.
-Shared feature flag integration remains follow-up work.
 
 ## Run locally
 
 From the repository root:
 
 ```bash
-go run ./cmd/web serve
+RANKR_FEATURE_WEB_ENABLED=on go run ./cmd/web serve
 ```
 
 Health endpoint:
@@ -47,20 +46,20 @@ Templates are embedded in the binary. Restart the web process after editing them
 Start leaderboardstat and its dependencies, then run:
 
 ```bash
-go run ./cmd/web serve --leaderboard
+RANKR_FEATURE_WEB_ENABLED=on RANKR_FEATURE_WEB_LEADERBOARD=on go run ./cmd/web serve
 ```
 
 Open http://localhost:8085/leaderboard?project_id=1028435569.
 
 `project_id` is the numeric GitHub repository ID.
 The page displays up to 10 rows, or an empty or error state.
-The page is disabled by default.
 
 Configure `leaderboard_api.base_url` and `leaderboard_api.timeout`
 in YAML. Environment overrides are also supported:
 
 ```bash
-WEB__LEADERBOARD_API__BASE_URL=http://127.0.0.1:8081 go run ./cmd/web serve --leaderboard
+RANKR_FEATURE_WEB_ENABLED=on RANKR_FEATURE_WEB_LEADERBOARD=on \
+  WEB__LEADERBOARD_API__BASE_URL=http://127.0.0.1:8081 go run ./cmd/web serve
 ```
 
 The refresh button updates the leaderboard using htmx.
@@ -71,10 +70,24 @@ htmx 2.0.11 is loaded from jsDelivr with an integrity check.
 The default file is deploy/web/development/config.yml.
 Set CONFIG_PATH to use another YAML file.
 
+The [shared flag registry](../../docs/flags.md) reads web flags from `features:`.
+Both flags default to `off`. Set both to `on` to start the server and expose
+the leaderboard:
+
+```yaml
+features:
+  web_enabled: on
+  web_leaderboard: on
+```
+
+`RANKR_FEATURE_WEB_ENABLED` and `RANKR_FEATURE_WEB_LEADERBOARD` override YAML.
+For local use, `--preview` and `--leaderboard` supply `on` defaults for the
+flags they need. Explicit feature settings take precedence over these defaults.
+
 Environment variables override YAML values. For example, in Git Bash:
 
 ```bash
-WEB__HTTP_SERVER__PORT=8086 go run ./cmd/web serve
+RANKR_FEATURE_WEB_ENABLED=on WEB__HTTP_SERVER__PORT=8086 go run ./cmd/web serve
 ```
 
 The health endpoint then uses port 8086.

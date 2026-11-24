@@ -69,7 +69,7 @@ func ParseState(value string) (State, error) {
 // match [a-z0-9_]+ so it survives both the koanf "." delimiter in YAML and
 // the RANKR_FEATURE_<NAME> environment mapping.
 func Registered() []string {
-	return []string{"scoring_v1"}
+	return []string{"scoring_v1", "web_enabled", "web_leaderboard"}
 }
 
 // IsRegistered reports whether name is a registered flag.
