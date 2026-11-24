@@ -27,6 +27,17 @@ leaderboard_api:
 		want     string
 	}{
 		{name: "both off by default"},
+		{name: "project alone", features: "  web_project: on\n"},
+		{
+			name:     "project starts only with web enabled",
+			features: "  web_enabled: on\n  web_project: on\n",
+			want:     "web: create project client:",
+		},
+		{
+			name:     "project in shadow",
+			features: "  web_enabled: on\n  web_project: shadow\n",
+			want:     invalidPort,
+		},
 		{name: "leaderboard alone", features: "  web_leaderboard: on\n"},
 		{name: "web in shadow", features: "  web_enabled: shadow\n", args: []string{"--preview"}},
 		{name: "web only", features: "  web_enabled: on\n", want: invalidPort},
